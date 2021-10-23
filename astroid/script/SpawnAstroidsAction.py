@@ -1,5 +1,6 @@
 from genie.script.action import UpdateAction
 from genie.cast.actor import Actor
+from astroid.cast.astroid import Astroid
 
 import random
 
@@ -42,7 +43,7 @@ class SpawnAstroidsAction(UpdateAction):
 
 
             # spawn an astroid
-            astroid = Actor(image_path, 1, x = start_pos_x, y = start_pos_y, vx = vel_x, vy = vel_y, rotation_vel=1)
+            astroid = Astroid(image_path, 1, x = start_pos_x, y = start_pos_y, vx = vel_x, vy = vel_y, rotation_vel=1)
             actors.append(astroid)
 
             # set last_spawn to current frame

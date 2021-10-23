@@ -92,15 +92,13 @@ class Actor(pygame.Rect):
         return super().centerx
     
     def set_x(self, x):
-        vx = x - super().centerx
-        super().move(vx, 0)
+        super().update(x - super().width / 2, super().top, super().width, super().height)
     
     def get_y(self):
         return super().centery
     
     def set_y(self, y):
-        vy = y - super().centery
-        super().move(0, vy)
+        super().update(super().left, y - super().height / 2, super().width, super().height)
     
     # Getters and setters for position
     def get_position(self):

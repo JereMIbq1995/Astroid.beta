@@ -12,6 +12,7 @@ from astroid.script.DrawFrameAction import DrawFrameAction
 from astroid.script.HandleInputAction import HandleInputAction
 from astroid.script.MoveActorsAction import MoveActorsAction
 from astroid.script.SpawnAstroidsAction import SpawnAstroidsAction
+from astroid.script.HandleOffscreenAction import HandleOffscreenAction
 
 W_SIZE = (500, 700)
 START_POSITION = 200, 250
@@ -45,6 +46,7 @@ def main():
 
     # Create update actions
     move_bodies = MoveActorsAction(1, PygamePhysicsService())
+    handle_offscreen = HandleOffscreenAction(1, W_SIZE)
     spawn_astroid = SpawnAstroidsAction(1, W_SIZE)
 
     # Create output actions
@@ -53,6 +55,7 @@ def main():
     # Give action(s) to the script
     script.append(handle_input)
     script.append(move_bodies)
+    script.append(handle_offscreen)
     script.append(spawn_astroid)
     script.append(draw_frame)
 

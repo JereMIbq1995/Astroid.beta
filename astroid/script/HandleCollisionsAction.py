@@ -7,10 +7,12 @@ from genie.script.action import UpdateAction
 from genie.services.PygamePhysicsService import PygamePhysicsService
 
 class HandleCollisionAction(UpdateAction):
-    def __init__(self):
-        pass
+    def __init__(self, priority):
+        self._priority = priority
+        self._ship = None
+        self._physics_service = PygamePhysicsService()
     
-    def _handle_bullet_astroid_col(self, actors):
+    def _handle_bullet_astroid_col(self, actors, callback):
         # for actor in actors:
         #     if isinstance(Bullet):
         #         for a in actors:
@@ -18,10 +20,22 @@ class HandleCollisionAction(UpdateAction):
         #                 actor.colliderect()
         pass
     
-    def _handle_ship_astroid_col(self, actors):
-        pass
+    def _handle_ship_astroid_col(self, actors, callback):
+        for actor in actors:
+            if (isinstance(actor, Ship)):
+                self._ship = actor
+                break
+
+        if self._ship != None:
+            for actor in actors:
+                if isinstance(actor, Astroid):
+                    if self._physics_service.check_collision(self._ship, actor):
+                        callback.remove_actor(self._ship)
+                        callback.remove_actor(actor)
+                        self._ship = None
+                        break
 
     def execute(self, actors, actions, clock, callback):
-        self._handle_bullet_astroid_col(actors)
-        self._handle_ship_astroid_col(actors)
+        self._handle_bullet_astroid_col(actors, callback)
+        self._handle_ship_astroid_col(actors, callback)
         pass

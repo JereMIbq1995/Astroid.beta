@@ -10,7 +10,6 @@ class HandleInputAction(InputAction):
         self._keyboard_service = keyboard_service
     
     def execute(self, actors, actions, clock, callback):
-        clock.tick()
         if self._keyboard_service.is_quit():
             callback.on_stop()
 

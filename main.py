@@ -1,3 +1,5 @@
+from astroid.script.HandleCollisionsAction import HandleCollisionAction
+from astroid.script.HandleShootingAction import HandleShootingAction
 from genie.director import Director
 from genie.services.PygameKeyboardService import PygameKeyboardService
 from genie.services.PygamePhysicsService import PygamePhysicsService
@@ -43,10 +45,12 @@ def main():
 
     # Create input actions
     handle_input = HandleInputAction(1, PygameKeyboardService())
+    handle_shooting = HandleShootingAction(1, PygameKeyboardService())
 
     # Create update actions
     move_bodies = MoveActorsAction(1, PygamePhysicsService())
     handle_offscreen = HandleOffscreenAction(1, W_SIZE)
+    handle_collision = HandleCollisionAction(1)
     spawn_astroid = SpawnAstroidsAction(1, W_SIZE)
 
     # Create output actions
@@ -54,8 +58,10 @@ def main():
 
     # Give action(s) to the script
     script.append(handle_input)
+    script.append(handle_shooting)
     script.append(move_bodies)
     script.append(handle_offscreen)
+    script.append(handle_collision)
     script.append(spawn_astroid)
     script.append(draw_frame)
 

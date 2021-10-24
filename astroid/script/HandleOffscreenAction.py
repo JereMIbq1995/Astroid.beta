@@ -17,8 +17,6 @@ class HandleOffscreenAction(UpdateAction):
                 self._ship = actor
                 break
         if (self._ship != None):
-            # print(self._ship.get_x(), self._ship.get_y())
-            print(self._window_size[0], self._window_size[1])
             if self._ship.get_x() > self._window_size[0]:
                 self._ship.set_x(self._window_size[0])
             if self._ship.get_x() < 0:
@@ -35,5 +33,3 @@ class HandleOffscreenAction(UpdateAction):
                     or actor.get_y() > self._window_size[1]
                     or actor.get_y() < 0):
                     callback.remove_actor(actor)
-        
-        print("Number of actors: ", len(actors))

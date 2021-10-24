@@ -44,7 +44,7 @@ class SpawnAstroidsAction(UpdateAction):
 
             # spawn an astroid
             astroid = Astroid(image_path, 1, x = start_pos_x, y = start_pos_y, vx = vel_x, vy = vel_y, rotation_vel=1)
-            actors.append(astroid)
+            callback.add_actor(astroid)
 
             # set last_spawn to current frame
             self._last_spawn = clock._frames

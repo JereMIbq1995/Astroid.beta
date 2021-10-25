@@ -9,6 +9,7 @@ from genie.script.action import Action
 
 
 from astroid.cast.ship import Ship
+from astroid.cast.background import Background
 
 from astroid.script.DrawFrameAction import DrawFrameAction
 from astroid.script.HandleInputAction import HandleInputAction
@@ -36,6 +37,7 @@ def main():
                     y = W_SIZE[1]/10 * 9,
                     rotation=180,
                     player_controlled=True)
+    background_image = Background("astroid/assets/space_1.png",1, x = W_SIZE[0]/2, y = W_SIZE[1]/2)
 
     # Give actor(s) to the cast
     cast.append(player)
@@ -54,7 +56,7 @@ def main():
     spawn_astroid = SpawnAstroidsAction(1, W_SIZE)
 
     # Create output actions
-    draw_frame = DrawFrameAction(1, W_SIZE)
+    draw_frame = DrawFrameAction(1, W_SIZE, background_image)
 
     # Give action(s) to the script
     script.append(handle_input)

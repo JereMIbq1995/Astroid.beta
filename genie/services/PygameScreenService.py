@@ -28,22 +28,21 @@ class PygameScreenService:
     def initialize(self):
         pass
     
-    def _load_image(self, actor : Actor):
+    def _load_image(self, actor : Actor, transform : bool = False):
         """
             Takes in an actor that has 2 traits: Body and Image
                 and load the image of that Actor into the cache
         """
         image_path = actor.get_path()
         image = pygame.image.load(image_path)
-        # scale = actor.get_scale()
-        # width = int(scale * image.get_width())
-        # height = int(scale * image.get_height())
+        
 
         # rotation = actor.get_rotation()
 
-        # transformed_image = pygame.transform.rotate(
-        #     pygame.transform.scale(image, (width, height)), 
-        #     rotation)
+        if transform:
+            image = pygame.transform.rotate(
+                pygame.transform.scale(image, (actor.get_width(), actor.get_height())), 
+                actor.get_rotation())
         
         # put image in cache so we don't have to load again
         if (image_path not in self._images_cache.keys()):
@@ -72,16 +71,13 @@ class PygameScreenService:
             image : pygame.Surface = None
 
             if path not in self._images_cache.keys():
-                image = self._load_image(background_image)
+                image = self._load_image(background_image, True)
             else:
                 image = self._images_cache[path]
             
             assert(image != None)
-            transformed_image = pygame.transform.rotate(
-                    pygame.transform.scale(image, (background_image.get_width(), background_image.get_height())), 
-                    background_image.get_rotation())
-
-            self._window.blit(transformed_image, topleft)
+            
+            self._window.blit(image, topleft)
         
         # pygame.display.update()
 

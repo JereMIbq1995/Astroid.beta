@@ -13,12 +13,19 @@ class HandleCollisionAction(UpdateAction):
         self._physics_service = PygamePhysicsService()
     
     def _handle_bullet_astroid_col(self, actors, callback):
-        # for actor in actors:
-        #     if isinstance(Bullet):
-        #         for a in actors:
-        #             if a != actor:
-        #                 actor.colliderect()
-        pass
+        bullets = []
+        astroids = []
+        for actor in actors:
+            if isinstance(actor, Bullet):
+                bullets.append(actor)
+            elif isinstance(actor, Astroid):
+                astroids.append(actor)
+        
+        for bullet in bullets:
+            for astroid in astroids:
+                if self._physics_service.check_collision(bullet, astroid):
+                    callback.remove_actor(bullet)
+                    callback.remove_actor(astroid)
     
     def _handle_ship_astroid_col(self, actors, callback):
         for actor in actors:

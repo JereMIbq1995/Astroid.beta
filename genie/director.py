@@ -75,9 +75,8 @@ class Director(Action.Callback):
         animation frame.
         """
         self._clock.tick()
-        for action in self._actions:
-            if isinstance(action, InputAction):
-                action.execute(self._actors, self._actions, self._clock, self)
+        for action in self._get_actions(InputAction):
+            action.execute(self._get_actors(), self._get_actions(), self._clock, self)
 
     def _do_updates(self):
         """Cues the update actions for the given cast and script. This method 
@@ -85,9 +84,8 @@ class Director(Action.Callback):
         caught up with the real time.
         """
         while self._clock.is_lagging():
-            for action in self._actions:
-                if isinstance(action, UpdateAction):
-                    action.execute(self._actors, self._actions, self._clock, self)
+            for action in self._get_actions(UpdateAction):
+                action.execute(self._get_actors(), self._get_actions(), self._clock, self)
             self._clock.catch_up()
     
     def _do_outputs(self):
@@ -95,11 +93,26 @@ class Director(Action.Callback):
         also clean's the cast of any removed actors since it is the end of the 
         animation frame.
         """
-        for action in self._actions:
-            if isinstance(action, OutputAction):
-                action.execute(self._actors, self._actions, self._clock, self)
+        for action in self._get_actions(OutputAction):
+            action.execute(self._get_actors(), self._get_actions(), self._clock, self)
         self._apply_changes()
     
+    def _get_actors(self):
+        """
+            Return a copy of the self._actors list.
+            Note: The list is a copy. But each item in the list IS the original item.
+        """
+        return [actor for actor in self._actors]
+    
+    def _get_actions(self, _type = Action):
+        """
+            Return a copy of the self._actions list filtered by type.
+            If no type is given, return the whole list
+            Note: The list is a copy. But each item in the list IS the original item.
+        """
+        return sorted([action for action in self._actions if isinstance(action, _type)], 
+                        key = lambda x: x.get_priority())
+
     def add_action(self, action):
         """Add the given action to the script.
 

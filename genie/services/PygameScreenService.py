@@ -1,3 +1,4 @@
+from typing import Tuple
 import pygame
 
 from genie.cast.actor import Actor
@@ -35,9 +36,6 @@ class PygameScreenService:
         """
         image_path = actor.get_path()
         image = pygame.image.load(image_path)
-        
-
-        # rotation = actor.get_rotation()
 
         if transform:
             image = pygame.transform.rotate(
@@ -57,59 +55,85 @@ class PygameScreenService:
         for actor in actors:
             self._load_image(actor)
 
-    def draw_frame(self, actors, color = WHITE, background_image : Actor = None, lerp : float = 0):
-        self.draw_background(color, background_image)
-        self.draw_images(actors, lerp)
+    def fill_screen(self, color = WHITE):
+        """
+            Fill the screen with a certain color
+        """
+        self._window.fill(color)
+
+    def update_screen(self):
+        """
+            Actually putting whatever was drawn on to the screen
+        """
         pygame.display.update()
 
+    def draw_rectangle(self, center : Tuple, width : int, height: int, color : tuple = (0, 0, 0), 
+                        border_width : int = 0, border_radius : int = 0, border_top_left_radius : int = -1,
+                        border_top_right_radius : int = -1, border_bottom_left_radius : int = -1, 
+                        border_bottom_right_radius : int = -1):
+        """
+            Draw a rectangle at the specified position
+        """
+        pygame.draw.rect(self._window, color, pygame.Rect(center[0] - width / 2, center[1] - height / 2, width, height),
+                        border_width, border_radius, border_top_left_radius, border_top_right_radius, border_bottom_left_radius,
+                        border_bottom_right_radius)
+    
+    def draw_circle(self, center, radius, color : tuple = (0, 0, 0), width : int = 0,
+                    draw_top_right : bool = False, draw_top_left : bool = False, draw_bottom_left : bool = False, 
+                    draw_bottom_right : bool = False):
+        """
+            Draw a circle at the specified position
+        """
+        pygame.draw.circle(self._window, color, center, radius, width, draw_top_right, draw_top_left, draw_bottom_left, draw_bottom_right)
 
-    def draw_background(self, color : tuple, background_image : Actor = None):
+    def draw_frame(self, actors, color = WHITE, background_image : Actor = None, lerp : float = 0):
+        """
+            Takes in a list of actors and a background image, then:
+                - First, draw the background if it's given.
+                    If background is not given, fill the screen the color given (default is WHITE)
+                - Next, draw all the actors in the "actors" list on top of the background
+                - Update display to show all the drawing.
+        """
+        self._draw_background(color, background_image)
+        self._draw_images(actors, lerp)
+        pygame.display.update()
+
+    def _draw_background(self, color : tuple, background_image : Actor = None):
+        """
+            Simply draws the background
+        """
         self._window.fill(color)
         if background_image != None:
-            topleft = background_image.get_top_left()
             path = background_image.get_path()
-            image : pygame.Surface = None
+            image = self._images_cache[path] if path in self._images_cache.keys() else self._load_image(background_image, True)
+            self._window.blit(image, background_image.get_top_left())
 
-            if path not in self._images_cache.keys():
-                image = self._load_image(background_image, True)
-            else:
-                image = self._images_cache[path]
-            
-            assert(image != None)
-            
-            self._window.blit(image, topleft)
-        
-        # pygame.display.update()
-
-    def draw_images(self, actors : list, lerp : float = 0):
+    def _draw_images(self, actors : list, lerp : float = 0):
         """
             actors: actors that need to be drew
             lerp: linear interpolation
         """
         for actor in actors:
             actor_topleft = actor.get_top_left()
-            image_path = actor.get_path()
-            image : pygame.Surface = None
-
-            if image_path in self._images_cache.keys():
-                image = self._images_cache[image_path]
-            else:
-                image = self._load_image(actor)
+            path = actor.get_path()
             
-            assert(image != None)
+            # Load image from cache or from file
+            image = self._images_cache[path] if path in self._images_cache.keys() else self._load_image(actor)
+
+            # Ensure that the image rotates when actor._rotation changes or when width and height change
             transformed_image = pygame.transform.rotate(
                     pygame.transform.scale(image, (actor.get_width(), actor.get_height())), 
                     actor.get_rotation())
             
+            # Shift the image upward and to the left to account for pygame's way to do rotation
             offset_x = (transformed_image.get_width() - actor.get_width()) / 2
             offset_y = (transformed_image.get_height() - actor.get_height()) / 2
-
             image_topleft = (actor_topleft[0] - offset_x, actor_topleft[1] - offset_y)
-            self._window.blit(transformed_image, image_topleft)
-            # pygame.draw.rect(self._window, (0,0,0), actor, width = 5)
 
-        
-        # pygame.display.update()
+            # Draw the image with pygame
+            self._window.blit(transformed_image, image_topleft)
+
+            # pygame.draw.rect(self._window, (0,0,0), actor, width = 5)
 
     def release(self):
         pass

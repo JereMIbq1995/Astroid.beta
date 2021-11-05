@@ -23,11 +23,14 @@ class PygameAudioService:
                 - the path to the sound file 
                 - the volume
         """
-        # Load the sound if it's not in cache, otherwise pull from cache
-        sound = self._load_sound(path) if path not in self._sound_cache.keys() \
-                else self._sound_cache[path]
-        # Set volume
-        sound.set_volume(volume)
+        try:
+            # Load the sound if it's not in cache, otherwise pull from cache
+            sound = self._load_sound(path) if path not in self._sound_cache.keys() \
+                    else self._sound_cache[path]
+            # Set volume
+            sound.set_volume(volume)
 
-        # Play!
-        sound.play()
+            # Play!
+            sound.play()
+        except:
+            print("Cannot find audio file: ", path)

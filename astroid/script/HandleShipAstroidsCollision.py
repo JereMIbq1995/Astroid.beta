@@ -15,15 +15,22 @@ class HandleShipAstroidsCollision(UpdateAction):
         self._physics_service = physics_service
         self._audio_service = audio_service               
 
+    def _get_ship(self, actors):
+        """
+            Look through the actors and return the ship.
+            Returns None if Ship is not in the list.
+        """
+        for actor in actors:
+            if(isinstance(actor, Ship)):
+                return actor
+        return None
+
     def execute(self, actors, actions, clock, callback):
         """
             This action handles all collisions between the SHIP and the ASTROIDS
         """
         # First look for the ship
-        if (self._ship == None):
-            for actor in actors:
-                if (isinstance(actor, Ship)):
-                    self._ship = actor
+        self._ship = self._get_ship(actors)
 
         # Only worry about collision if the ship actually exists
         if self._ship != None:

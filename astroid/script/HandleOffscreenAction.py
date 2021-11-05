@@ -13,16 +13,23 @@ class HandleOffscreenAction(UpdateAction):
         self._ship = None
         self._mother_ship = None
     
+    def _get_ship(self, actors):
+        """
+            Look through the actors and return the ship.
+            Returns None if Ship is not in the list.
+        """
+        for actor in actors:
+            if(isinstance(actor, Ship)):
+                return actor
+        return None
+
     def execute(self, actors, actions, clock, callback):
         """
             Handle all actors' behavior when they're about to
             go off the screen
         """
-        # Look for the ship and mother ship
-        if (self._ship == None):
-            for actor in actors:
-                if isinstance(actor, Ship):
-                    self._ship = actor
+        # Look for the ship
+        self._ship = self._get_ship(actors)
         
         # Don't allow the ship to go off the screen
         if (self._ship != None):

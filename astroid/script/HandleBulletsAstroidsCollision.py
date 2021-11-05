@@ -1,7 +1,5 @@
-
 from astroid.cast.astroid import Astroid
 from astroid.cast.playerScore import PlayerScore
-from astroid.cast.ship import Ship
 from astroid.cast.bullet import Bullet
 
 from genie.script.action import UpdateAction

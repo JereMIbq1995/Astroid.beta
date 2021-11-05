@@ -1,8 +1,7 @@
 from genie.cast.actor import Actor
 
 class Ship(Actor):
-    def __init__(self, path: str, 
-                scale: float = 1, 
+    def __init__(self, path: str,
                 width: int = 0, 
                 height: int = 0, 
                 
@@ -13,11 +12,9 @@ class Ship(Actor):
                 vy: float = 0, 
                 
                 rotation: float = 0, 
-                rotation_vel: float = 0, 
-                player_controlled: bool = False):
+                rotation_vel: float = 0):
 
         super().__init__(path, 
-                        scale=scale, 
                         width=width, 
                         height=height, 
                         
@@ -28,5 +25,4 @@ class Ship(Actor):
                         vy=vy, 
                         
                         rotation=rotation, 
-                        rotation_vel=rotation_vel, 
-                        player_controlled=player_controlled)
+                        rotation_vel=rotation_vel)

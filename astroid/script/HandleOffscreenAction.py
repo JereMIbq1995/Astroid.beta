@@ -1,5 +1,6 @@
 
 from astroid.cast.astroid import Astroid
+from astroid.cast.mothership import MotherShip
 from astroid.cast.ship import Ship
 from astroid.cast.bullet import Bullet
 
@@ -10,22 +11,31 @@ class HandleOffscreenAction(UpdateAction):
         super().__init__(priority)
         self._window_size = window_size
         self._ship = None
+        self._mother_ship = None
     
     def execute(self, actors, actions, clock, callback):
-        for actor in actors:
-            if (isinstance(actor, Ship)):
-                self._ship = actor
-                break
-        if (self._ship != None):
-            if self._ship.get_x() > self._window_size[0]:
-                self._ship.set_x(self._window_size[0])
-            if self._ship.get_x() < 0:
-                self._ship.set_x(0)
-            if self._ship.get_y() > self._window_size[1]:
-                self._ship.set_y(self._window_size[1])
-            if self._ship.get_y() < 0:
-                self._ship.set_y(0)
+        """
+            Handle all actors' behavior when they're about to
+            go off the screen
+        """
+        # Look for the ship and mother ship
+        if (self._ship == None):
+            for actor in actors:
+                if isinstance(actor, Ship):
+                    self._ship = actor
         
+        # Don't allow the ship to go off the screen
+        if (self._ship != None):
+            if self._ship.get_top_right()[0] >= self._window_size[0]:
+                self._ship.set_x(int(self._window_size[0] - self._ship.get_width()/2))
+            if self._ship.get_top_left()[0] <= 0:
+                self._ship.set_x(int(self._ship.get_width()/2))
+            if self._ship.get_bottom_left()[1] >= self._window_size[1]:
+                self._ship.set_y(int(self._window_size[1] - self._ship.get_height()/2))
+            if self._ship.get_top_left()[1] <= 0:
+                self._ship.set_y(int(self._ship.get_height()/2))
+        
+        # If it's a bullet or astroid goin off the screen, just remove it.
         for actor in actors:
             if isinstance(actor, Astroid) or isinstance(actor, Bullet):
                 if (actor.get_x() > self._window_size[0]

@@ -8,14 +8,26 @@ class PygameAudioService:
         self._sound_cache = {}
 
     def _load_sound(self, path):
+        """
+            - Load in the sound
+            - Store the sound to cache
+            - return the sound
+        """
         sound = pygame.mixer.Sound(path)
-        if path not in self._sound_cache.keys():
-            self._sound_cache[path] = sound
-        
+        self._sound_cache[path] = sound
         return sound
 
     def play_sound(self, path, volume : float = 1):
+        """
+            Play a sound given:
+                - the path to the sound file 
+                - the volume
+        """
+        # Load the sound if it's not in cache, otherwise pull from cache
         sound = self._load_sound(path) if path not in self._sound_cache.keys() \
                 else self._sound_cache[path]
+        # Set volume
         sound.set_volume(volume)
+
+        # Play!
         sound.play()

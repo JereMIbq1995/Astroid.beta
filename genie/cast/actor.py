@@ -1,7 +1,4 @@
-from typing import overload
-import pygame
-
-class Actor(pygame.Rect):
+class Actor:
     """
         A thing that participates in an animation. Anything that either MOVES, can be DRAWN
         on the screen, or BOTH is an actor.
@@ -15,9 +12,8 @@ class Actor(pygame.Rect):
             _height : 
     """
     def __init__(self, path : str,
-                    scale : float = 1,
-                    width : int = 0,
-                    height : int = 0,
+                    width : int,
+                    height : int,
 
                     x : float = 0, 
                     y : float = 0,
@@ -26,47 +22,26 @@ class Actor(pygame.Rect):
                     vy : float = 0,
 
                     rotation : float = 0,
-                    rotation_vel : float = 0,
-                    player_controlled : bool = False):
+                    rotation_vel : float = 0):
         """
             Initialize the actor using the image and
             a scaling factor, or width and height
         """
 
         self._path = path
-        self._scale = scale
+
+        self._width = width
+        self._height = height
+
+        self._x = x
+        self._y = y
 
         self._vx = vx
         self._vy = vy
 
         self._rotation = rotation
         self._rotation_vel = rotation_vel
-        self._player_controlled = player_controlled
-
-        # If both the height and width are provided, use
-        # it to initialize the triangle
-        if (height != 0 and width != 0):
-            left = int(x - width / 2)
-            top = int(y - height / 2)
-            super().__init__(left, top, width, height)
         
-        # If either height and with are 0, use the scale
-        else:
-            wh = self._get_width_height()
-            left = int(x - wh[0] / 2)
-            top = int(y - wh[1] / 2)
-            super().__init__(left, top, wh[0], wh[1])
-    
-    def _get_width_height(self):
-        """
-            Use the size of the image provided by the path and
-            the scaling to figure out the size of the rectangular actor
-        """
-        image = pygame.image.load(self._path)
-        width = int(self._scale * image.get_width())
-        height = int(self._scale * image.get_height())
-        return (width, height)
-    
     # Path
     def get_path(self):
         return self._path
@@ -76,42 +51,55 @@ class Actor(pygame.Rect):
     
     # Getters and setters for width and height
     def get_width(self):
-        return super().width
+        return self._width
     
     def set_width(self, width):
-        super().width = width
+        self._width = width
     
     def get_height(self):
-        return super().height
+        return self._height
     
     def set_height(self, height):
-        super().height = height
+        self._height = height
 
+    def scale(self, scale):
+        self._width *= scale
+        self._height *= scale
+    
     # Getters and setters for x and y
     def get_x(self):
-        return super().centerx
+        return self._x
     
     def set_x(self, x):
-        super().update(x - super().width / 2, super().top, super().width, super().height)
+        self._x = x
     
     def get_y(self):
-        return super().centery
+        return self._y
     
     def set_y(self, y):
-        super().update(super().left, y - super().height / 2, super().width, super().height)
+        self._y = y
     
     # Getters and setters for position
     def get_position(self):
-        return (self.get_x(), self.get_y())
+        return (self._x, self._y)
     
     def set_position(self, x, y):
-        self.set_x(x)
-        self.set_y(y)
+        self._x = x
+        self._y = y
     
     # Getters for top-left corner of the rectangle
     def get_top_left(self):
-        return super().topleft
+        return (self._x - self._width / 2, self._y - self._height / 2)
     
+    def get_top_right(self):
+        return (self._x + self._width / 2, self._y - self._height / 2)
+
+    def get_bottom_left(self):
+        return (self._x - self._width / 2, self._y + self._height / 2)
+    
+    def get_bottom_right(self):
+        return (self._x + self._width / 2, self._y + self._height / 2)
+
     # Getters and setters for velocity
     def get_vx(self):
         return self._vx
@@ -137,25 +125,14 @@ class Actor(pygame.Rect):
     
     def set_rotation_vel(self, rotation_vel):
         self._rotation_vel = rotation_vel
-    
-    # Getter and setter for the player_controlled bool
-    def player_controlled(self):
-        return self._player_controlled
-    
-    def set_player_controlled(self, player_controlled):
-        self._player_controlled = player_controlled
 
-    # Move function
+    # Move functions
     def move_with_vel(self):
         """
             Simply add vx and vy onto x and y respectively
         """
-        super().update(super().left + self._vx, super().top + self._vy, super().width, super().height)
+        self._x += self._vx
+        self._y += self._vy
     
     def rotate(self):
         self._rotation += self._rotation_vel
-        
-    # # In case the hit box needs to be updated
-    # def update_hitbox(self, image : pygame.Surface):
-    #     super().width = image.get_width()
-    #     super().height = image.get_height()

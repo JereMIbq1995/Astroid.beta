@@ -1,4 +1,3 @@
-from typing import Any
 from genie.script.action import OutputAction
 
 class UpdateScreenAction(OutputAction):

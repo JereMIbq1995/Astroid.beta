@@ -1,6 +1,5 @@
 from genie.script.action import InputAction
-from genie.services.PygameKeyboardService import PygameKeyboardService
-from genie.services.constants import keys
+from genie.services import keys
 
 from astroid.cast.ship import Ship
 

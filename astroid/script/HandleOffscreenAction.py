@@ -1,6 +1,5 @@
 
 from astroid.cast.astroid import Astroid
-from astroid.cast.mothership import MotherShip
 from astroid.cast.ship import Ship
 from astroid.cast.bullet import Bullet
 

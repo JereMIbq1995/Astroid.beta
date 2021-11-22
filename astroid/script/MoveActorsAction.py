@@ -1,5 +1,4 @@
 from genie.script.action import UpdateAction
-from genie.services.PygamePhysicsService import PygamePhysicsService
 
 class MoveActorsAction(UpdateAction):
     def __init__(self, priority, physics_service):

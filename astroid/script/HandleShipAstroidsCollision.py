@@ -1,12 +1,8 @@
 
 from astroid.cast.astroid import Astroid
-from astroid.cast.playerScore import PlayerScore
 from astroid.cast.ship import Ship
-from astroid.cast.bullet import Bullet
 
 from genie.script.action import UpdateAction
-from genie.services.PygamePhysicsService import PygamePhysicsService
-from genie.services.PygameAudioService import PygameAudioService
 
 class HandleShipAstroidsCollision(UpdateAction):
     def __init__(self, priority, physics_service, audio_service):

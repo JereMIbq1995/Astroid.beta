@@ -1,19 +1,17 @@
-import pygame
-from genie.services.constants import keys
+from pyray import *
+from .constants.keys import keys_map
 
-class PygameKeyboardService():
+class RaylibKeyboardService():
     def __init__(self):
-        if not pygame.get_init():
-            pygame.init()
+        # if not pygame.get_init():
+        #     pygame.init()
+        pass
 
     def is_quit(self):
         """
             tell the user whether the X button on the top right is pressed
         """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return True
-        return False
+        return window_should_close()
 
     def get_keys_state(self, *keys):
         """
@@ -28,24 +26,30 @@ class PygameKeyboardService():
             Note: There is a chance that some keys might not get detected if multiple
                 keys are pressed at the same time
         """
-        pygame.event.pump()
-        keys_pressed = {}
-        keys_state = pygame.key.get_pressed()
+        keys_state = {}
         for key in keys:
-            keys_pressed[key] = keys_state[key]
+            keys_state[key] = is_key_down(keys_map[key])
         
-        return keys_pressed
+        return keys_state
 
     def is_key_pressed(self, key):
         """
             check to see if a key is pressed. Returns True for pressed and False for released
         """
-        keys_state_dict = self.get_keys_state(key)
-        return keys_state_dict[key]
+        return is_key_pressed(keys_map[key])
+        # keys_state_dict = self.get_keys_state(key)
+        # return keys_state_dict[key]
     
     def is_key_released(self, key):
         """
             Similar to is_key_pressed, but returns True for released and False for pressed
         """
-        keys_state_dict = self.get_keys_state(key)
-        return keys_state_dict[key] ^ 1
+        return is_key_released(keys_map[key])
+        # keys_state_dict = self.get_keys_state(key)
+        # return keys_state_dict[key] ^ 1
+    
+    def is_key_down(self, key):
+        return is_key_down(keys_map[key])
+    
+    def is_key_up(self, key):
+        return is_key_up(keys_map[key])

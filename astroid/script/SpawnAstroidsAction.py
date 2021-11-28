@@ -16,8 +16,8 @@ SMALL = 3
 class SpawnAstroidsAction(UpdateAction):
     def __init__(self, priority, window_size):
         super().__init__(priority)
-        # self._spawned = False
-        self._last_spawn = time.time() # seconds
+        self._timer_started = False
+        self._last_spawn = 0 # seconds
         self._window_size = window_size
         self._astroid_spawn = False
 
@@ -72,6 +72,10 @@ class SpawnAstroidsAction(UpdateAction):
             - Add the astroid to the cast
             - Record the most recent spawn
         """
+        if not self._timer_started:
+            self._timer_started = True
+            self._last_spawn = time.time()
+        
         if time.time() - self._last_spawn >= SPAWN_INTERVAL:
             # Pick a random type of astroid: Small, Medium, Large
             astroid_type = random.randint(1,3)

@@ -97,16 +97,11 @@ def main():
     startgame_actions.append(SpawnAstroidsAction(1, W_SIZE))
     script.append(HandleStartGameAction(2, mouse_service, physics_service, startgame_actions))
 
-    # script.append(HandleShipMovementAction(2, keyboard_service))
-    # script.append(HandleShootingAction(1, keyboard_service, audio_service))
-
-
     # Create update actions
     script.append(MoveActorsAction(1, physics_service))
     script.append(HandleOffscreenAction(1, W_SIZE))
     script.append(HandleShipAstroidsCollision(1, physics_service, audio_service))
     script.append(HandleBulletsAstroidsCollision(1, physics_service, audio_service))
-    # script.append(SpawnAstroidsAction(1, W_SIZE))
 
     # Create output actions
     script.append(DrawActorsAction(1, screen_service))

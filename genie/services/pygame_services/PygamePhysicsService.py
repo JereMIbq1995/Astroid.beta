@@ -27,6 +27,9 @@ class PygamePhysicsService:
                 self._get_rectangle(actor2)
                 )
     
+    def check_collision_point(self, actor: Actor, point : tuple):
+        return self._get_rectangle(actor).collidepoint(point[0], point[1])
+
     def check_collision_list(self, target: Actor, actors: list):
         """
             return the first actor in the actors list that collides with target

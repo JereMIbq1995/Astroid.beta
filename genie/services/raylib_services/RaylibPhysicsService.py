@@ -23,6 +23,9 @@ class RaylibPhysicsService:
         """
         return check_collision_recs( self._get_rectangle(actor1), self._get_rectangle(actor2) )
     
+    def check_collision_point(self, actor: Actor, point : tuple):
+        return check_collision_point_rec( Vector2(point[0], point[1]), self._get_rectangle(actor) )
+    
     def check_collision_list(self, target: Actor, actors: list):
         """
             return the first actor in the actors list that collides with target

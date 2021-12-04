@@ -28,7 +28,7 @@ class HandleOffscreenAction(UpdateAction):
             go off the screen
         """
         # Look for the ship
-        self._ship = self._get_ship(actors)
+        self._ship = actors.get_first_actor("ship")
         
         # Don't allow the ship to go off the screen
         if (self._ship != None):
@@ -42,10 +42,10 @@ class HandleOffscreenAction(UpdateAction):
                 self._ship.set_y(int(self._ship.get_height()/2))
         
         # If it's a bullet or astroid goin off the screen, just remove it.
-        for actor in actors:
-            if isinstance(actor, Astroid) or isinstance(actor, Bullet):
-                if (actor.get_x() > self._window_size[0]
-                    or actor.get_x() < 0
-                    or actor.get_y() > self._window_size[1]
-                    or actor.get_y() < 0):
-                    callback.remove_actor(actor)
+        for actor in actors.get_actors("astroids"):
+            # if isinstance(actor, Astroid) or isinstance(actor, Bullet):
+            if (actor.get_x() > self._window_size[0]
+                or actor.get_x() < 0
+                or actor.get_y() > self._window_size[1]
+                or actor.get_y() < 0):
+                actors.remove_actor("astroids", actor)

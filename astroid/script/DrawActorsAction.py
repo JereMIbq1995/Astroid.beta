@@ -15,4 +15,11 @@ class DrawActorsAction(OutputAction):
         """
             Take advantage of the screen_service's draw_actors function
         """
-        self._screen_service.draw_actors(actors)
+        self._screen_service.draw_actors(actors.get_all_actors())
+        # self._screen_service.draw_actors(actors.get_actors("background_image"))
+        # self._screen_service.draw_actors(actors.get_actors("score"))
+        # self._screen_service.draw_actors(actors.get_actors("ship"))
+        # self._screen_service.draw_actors(actors.get_actors("mother_ship"))
+        # self._screen_service.draw_actors(actors.get_actors("start_button"))
+        # self._screen_service.draw_actors(actors.get_actors("astroids"))
+        # self._screen_service.draw_actors(actors.get_actors("bullets"))

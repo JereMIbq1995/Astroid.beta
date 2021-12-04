@@ -26,7 +26,7 @@ class HandleShipMovementAction(InputAction):
             This action handles the movement of the ship
         """
         # Look for the ship among the actors if we haven't already known it
-        self._ship = self._get_ship(actors)
+        self._ship = actors.get_first_actor("ship")
         
         # Don't worry about it if ship doesn't exist
         if (self._ship != None):

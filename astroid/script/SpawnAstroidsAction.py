@@ -90,7 +90,7 @@ class SpawnAstroidsAction(UpdateAction):
 
             # spawn an astroid
             astroid = self._create_astroid(astroid_type, start_pos_x, start_pos_y)
-            callback.add_actor(astroid)
+            actors.add_actor("astroids", astroid)
 
             # set last_spawn to current frame
             self._last_spawn = time.time()

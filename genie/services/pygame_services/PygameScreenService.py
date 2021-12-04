@@ -2,6 +2,7 @@ from typing import Tuple
 import pygame
 
 from genie.cast.actor import Actor
+from genie.cast.animatedActor import AnimatedActor
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0, 0)
@@ -20,11 +21,13 @@ class PygameScreenService:
                 convert image data to what pygame needs
                 use pygame to draw
     """
-    def __init__(self, window_size):
+    def __init__(self, window_size, title: str = "", fps : int = 60):
         if not pygame.get_init():
             pygame.init()
         self._images_cache = {}
         self._window = pygame.display.set_mode(window_size)
+        self._clock = pygame.time.Clock()
+        self._fps = fps
     
     def initialize(self):
         pass
@@ -54,6 +57,12 @@ class PygameScreenService:
         """
         for actor in actors:
             self._load_image(actor)
+    
+    def set_fps(self, fps : int = 60):
+        self._fps = fps
+
+    def begin_drawing(self):
+        pass
 
     def fill_screen(self, color = WHITE):
         """
@@ -65,7 +74,11 @@ class PygameScreenService:
         """
             Actually putting whatever was drawn on to the screen
         """
+        self._clock.tick(self._fps)
         pygame.display.update()
+    
+    def close_window(self):
+        pygame.quit()
 
     # def get_text_image(self):
     #     font = pygame.font.SysFont(font, font_size)
@@ -169,6 +182,9 @@ class PygameScreenService:
 
                 # Draw the image with pygame
                 self._window.blit(transformed_image, image_topleft)
+
+                if isinstance(actor, AnimatedActor):
+                    actor.set_next_frame()
 
                 # The following lines of code when un-comment show the hit box of the actor AND the boundary of the image (the 2 are different)
                 # pygame.draw.rect(self._window, (0,0,0), pygame.Rect(actor_topleft[0], actor_topleft[1], actor.get_width(), actor.get_height()), width = 5)

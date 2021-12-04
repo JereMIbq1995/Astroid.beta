@@ -3,6 +3,7 @@ from raylib.colors import *
 import math
 
 from genie.cast.actor import Actor
+from genie.cast.animatedActor import AnimatedActor
 
 circle_sectors_dict = {
     # tr    tl    bl    br       : (start_angle, end_angle)
@@ -40,17 +41,15 @@ class RaylibScreenService:
                 convert image data to what pygame needs
                 use pygame to draw
     """
-    def __init__(self, window_size, title : str = ""):
+    def __init__(self, window_size, title : str = "", fps : int = 60):
         # if not pyray.is_window_ready():
         #     print("window initialized!")
         init_window(window_size[0], window_size[1], title)
         self._textures_cache = {}
+        self._fps = 60
     
     def initialize(self):
         pass
-    
-    def set_fps(self, fps : int = 60):
-        set_target_fps(fps)
 
     def _load_texture(self, actor : Actor):
         """
@@ -73,18 +72,21 @@ class RaylibScreenService:
         """
         for actor in actors:
             self._load_texture(actor)
-
-    def fill_screen(self, color = WHITE):
-        """
-            Fill the screen with a certain color
-        """
-        clear_background(color)
+    
+    def set_fps(self, fps : int = 60):
+        set_target_fps(fps)
 
     def begin_drawing(self):
         """
             What to call before drawing anything in a frame
         """
         begin_drawing()
+
+    def fill_screen(self, color = WHITE):
+        """
+            Fill the screen with a certain color
+        """
+        clear_background(color)
 
     def update_screen(self):
         """
@@ -206,7 +208,6 @@ class RaylibScreenService:
         try:
             # Load image from cache or from file
             texture = self._textures_cache[path] if path in self._textures_cache.keys() else self._load_texture(actor)
-            
             # width and height of the image
             frame_width = actor.get_width()
             frame_height = actor.get_height()
@@ -217,11 +218,15 @@ class RaylibScreenService:
                             Vector2(frame_width/2, frame_height/2),
                             actor.get_rotation(),
                             WHITE)
-
+                            
+            if isinstance(actor, AnimatedActor):
+                actor.set_next_frame()
+                
             # This line of code when un-commented shows the hit box of the actor
             # draw_rectangle_lines(int(actor.get_top_left()[0]), int(actor.get_top_left()[1]), int(actor.get_width()), int(actor.get_height()),BLACK)
         except:
             print("Something went wrong in RaylibScreenService.draw_actor()! Most likely path not found!")
+            print(path)
 
     def draw_actors(self, actors : list, lerp : float = 0):
         """

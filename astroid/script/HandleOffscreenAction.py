@@ -1,8 +1,4 @@
 
-from astroid.cast.astroid import Astroid
-from astroid.cast.ship import Ship
-from astroid.cast.bullet import Bullet
-
 from genie.script.action import UpdateAction
 
 class HandleOffscreenAction(UpdateAction):
@@ -11,16 +7,6 @@ class HandleOffscreenAction(UpdateAction):
         self._window_size = window_size
         self._ship = None
         self._mother_ship = None
-    
-    def _get_ship(self, actors):
-        """
-            Look through the actors and return the ship.
-            Returns None if Ship is not in the list.
-        """
-        for actor in actors:
-            if(isinstance(actor, Ship)):
-                return actor
-        return None
 
     def execute(self, actors, actions, clock, callback):
         """

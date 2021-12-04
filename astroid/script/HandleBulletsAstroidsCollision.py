@@ -1,7 +1,3 @@
-from astroid.cast.astroid import Astroid
-from astroid.cast.playerScore import PlayerScore
-from astroid.cast.bullet import Bullet
-
 from genie.script.action import UpdateAction
 
 class HandleBulletsAstroidsCollision(UpdateAction):
@@ -10,27 +6,6 @@ class HandleBulletsAstroidsCollision(UpdateAction):
         self._score = None
         self._physics_service = physics_service
         self._audio_service = audio_service
-    
-    def _get_score_actor(self, actors):
-        """
-            Loop through all actors to get the PlayerScore actor
-            Return None if it doesn't exist
-        """
-        for actor in actors:
-            if (isinstance(actor, PlayerScore)):
-                return actor
-        return None
-    
-    def _get_bullets(self, actors):
-        """
-            Collect all the Bullets from the actors list.
-            Then return that list of bullets.
-        """
-        bullets = []
-        for actor in actors:
-            if isinstance(actor, Bullet):
-                bullets.append(actor)
-        return bullets
 
     def execute(self, actors, actions, clock, callback):
         """

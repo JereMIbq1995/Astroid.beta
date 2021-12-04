@@ -3,10 +3,8 @@ import time
 from genie.script.action import InputAction
 from genie.services import keys
 
-from astroid.cast.ship import Ship
 from astroid.cast.bullet import Bullet
 
-VEL = 4
 BULLET_VX = 0
 BULLET_VY = -10
 ATTACK_INTERVAL = 0.25   # seconds
@@ -40,16 +38,6 @@ class HandleShootingAction(InputAction):
 
             # Record the time this bullet spawns
             self._last_bullet_spawn = time.time()
-
-    def _get_ship(self, actors):
-        """
-            Look through the actors and return the ship.
-            Returns None if Ship is not in the list.
-        """
-        for actor in actors:
-            if(isinstance(actor, Ship)):
-                return actor
-        return None
 
     def execute(self, actors, actions, clock, callback):
         """

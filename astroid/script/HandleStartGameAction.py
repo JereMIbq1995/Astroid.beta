@@ -1,13 +1,5 @@
-from genie.script.action import InputAction, UpdateAction, OutputAction
+from genie.script.action import InputAction
 from genie.services import mouse
-
-from astroid.cast.startGameButton import StartGameButton
-
-GROUP_DICT = {
-    InputAction : "input",
-    UpdateAction : "update",
-    OutputAction : "output"
-}
 
 class HandleStartGameAction(InputAction):
     def __init__(self, priority, mouse_service, physics_service, actions):
@@ -15,12 +7,6 @@ class HandleStartGameAction(InputAction):
         self._mouse_service = mouse_service
         self._physics_service = physics_service
         self._actions = actions
-
-    def _get_start_button(self, actors):
-        for actor in actors:
-            if isinstance(actor, StartGameButton):
-                return actor
-        return None
 
     def execute(self, actors, actions, clock, callback):
         """
@@ -45,6 +31,3 @@ class HandleStartGameAction(InputAction):
                     actions.add_action("update", action)
                 for action in self._actions["output"]:
                     actions.add_action("output", action)
-                print("input: ", actions.get_actions("input"))
-                print("update: ", actions.get_actions("update"))
-                print("output: ", actions.get_actions("output"))

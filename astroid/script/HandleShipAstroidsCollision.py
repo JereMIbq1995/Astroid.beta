@@ -1,7 +1,4 @@
 
-from astroid.cast.astroid import Astroid
-from astroid.cast.ship import Ship
-
 from genie.script.action import UpdateAction
 
 class HandleShipAstroidsCollision(UpdateAction):
@@ -9,17 +6,7 @@ class HandleShipAstroidsCollision(UpdateAction):
         self._priority = priority
         self._ship = None
         self._physics_service = physics_service
-        self._audio_service = audio_service               
-
-    def _get_ship(self, actors):
-        """
-            Look through the actors and return the ship.
-            Returns None if Ship is not in the list.
-        """
-        for actor in actors:
-            if(isinstance(actor, Ship)):
-                return actor
-        return None
+        self._audio_service = audio_service
 
     def execute(self, actors, actions, clock, callback):
         """

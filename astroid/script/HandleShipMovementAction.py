@@ -1,8 +1,6 @@
 from genie.script.action import InputAction
 from genie.services import keys
 
-from astroid.cast.ship import Ship
-
 VEL = 4
 
 class HandleShipMovementAction(InputAction):
@@ -10,16 +8,6 @@ class HandleShipMovementAction(InputAction):
         super().__init__(priority)
         self._keyboard_service = keyboard_service
         self._ship = None
-    
-    def _get_ship(self, actors):
-        """
-            Look through the actors and return the ship.
-            Returns None if Ship is not in the list.
-        """
-        for actor in actors:
-            if(isinstance(actor, Ship)):
-                return actor
-        return None
 
     def execute(self, actors, actions, clock, callback):
         """

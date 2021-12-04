@@ -154,6 +154,36 @@ class PygameScreenService:
         """
         pygame.draw.circle(self._window, color, center, radius, width, draw_top_right, draw_top_left, draw_bottom_left, draw_bottom_right)
     
+    def draw_actor(self, actor : Actor):
+        actor_topleft = actor.get_top_left()
+        path = actor.get_path()
+        
+        try:
+            # Load image from cache or from file
+            image = self._images_cache[path] if path in self._images_cache.keys() else self._load_image(actor)
+
+            # Ensure that the image rotates when actor._rotation changes or when width and height change
+            transformed_image = pygame.transform.rotate(
+                    pygame.transform.scale(image, (actor.get_width(), actor.get_height())), 
+                    actor.get_rotation())
+            
+            # Shift the image upward and to the left to account for pygame's way to do rotation
+            offset_x = (transformed_image.get_width() - actor.get_width()) / 2
+            offset_y = (transformed_image.get_height() - actor.get_height()) / 2
+            image_topleft = (actor_topleft[0] - offset_x, actor_topleft[1] - offset_y)
+
+            # Draw the image with pygame
+            self._window.blit(transformed_image, image_topleft)
+
+            if isinstance(actor, AnimatedActor):
+                actor.set_next_frame()
+
+            # The following lines of code when un-comment show the hit box of the actor AND the boundary of the image (the 2 are different)
+            # pygame.draw.rect(self._window, (0,0,0), pygame.Rect(actor_topleft[0], actor_topleft[1], actor.get_width(), actor.get_height()), width = 5)
+            # pygame.draw.rect(self._window, (0,0,0), pygame.Rect(image_topleft[0], image_topleft[1], transformed_image.get_width(), transformed_image.get_height()), width = 5)
+        except:
+                pass
+
     def draw_actors(self, actors : list, lerp : float = 0):
         """
             Draw all the actors in the "actors" list in order:
@@ -163,36 +193,7 @@ class PygameScreenService:
             lerp: linear interpolation
         """
         for actor in actors:
-            actor_topleft = actor.get_top_left()
-            path = actor.get_path()
-            
-            try:
-                # Load image from cache or from file
-                image = self._images_cache[path] if path in self._images_cache.keys() else self._load_image(actor)
-
-                # Ensure that the image rotates when actor._rotation changes or when width and height change
-                transformed_image = pygame.transform.rotate(
-                        pygame.transform.scale(image, (actor.get_width(), actor.get_height())), 
-                        actor.get_rotation())
-                
-                # Shift the image upward and to the left to account for pygame's way to do rotation
-                offset_x = (transformed_image.get_width() - actor.get_width()) / 2
-                offset_y = (transformed_image.get_height() - actor.get_height()) / 2
-                image_topleft = (actor_topleft[0] - offset_x, actor_topleft[1] - offset_y)
-
-                # Draw the image with pygame
-                self._window.blit(transformed_image, image_topleft)
-
-                if isinstance(actor, AnimatedActor):
-                    actor.set_next_frame()
-
-                # The following lines of code when un-comment show the hit box of the actor AND the boundary of the image (the 2 are different)
-                # pygame.draw.rect(self._window, (0,0,0), pygame.Rect(actor_topleft[0], actor_topleft[1], actor.get_width(), actor.get_height()), width = 5)
-                # pygame.draw.rect(self._window, (0,0,0), pygame.Rect(image_topleft[0], image_topleft[1], transformed_image.get_width(), transformed_image.get_height()), width = 5)
-            except:
-                pass
-        
-        
+            self.draw_actor(actor)
 
     def release(self):
         pass

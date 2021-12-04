@@ -25,6 +25,7 @@ class PygameScreenService:
         if not pygame.get_init():
             pygame.init()
         self._images_cache = {}
+        pygame.display.set_caption(title)
         self._window = pygame.display.set_mode(window_size)
         self._clock = pygame.time.Clock()
         self._fps = fps

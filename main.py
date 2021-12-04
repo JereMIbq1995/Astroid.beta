@@ -26,9 +26,12 @@ W_SIZE = (500, 700)
 START_POSITION = 200, 250
 SHIP_WIDTH = 40
 SHIP_LENGTH = 55
+SCREEN_TITLE = "Asteroids"
 
-def main():
-    
+def get_services():
+    """
+        Ask the user whether they want to use pygame or raylib services
+    """
     # Initialize all services:
     service_code = 0
     valid = False
@@ -37,20 +40,29 @@ def main():
         if len(str(service_code)) < 1 or not (int(service_code) == 1 or int(service_code) == 2):
             print("Incorrect input! Please try again!")
         else:
+            service_code = int(service_code)
             valid = True
+    
+    return {
+        "keyboard" : PygameKeyboardService() if service_code == 1 else RaylibKeyboardService(),
+        "physics" : PygamePhysicsService() if service_code == 1 else RaylibPhysicsService(),
+        "screen" : PygameScreenService(W_SIZE, SCREEN_TITLE) if service_code == 1 else RaylibScreenService(W_SIZE, SCREEN_TITLE),
+        "audio" : PygameAudioService() if service_code == 1 else RaylibAudioService(),
+        "mouse" : PygameMouseService() if service_code == 1 else RaylibMouseService()
+    }
 
-    if int(service_code) == 1:
-        keyboard_service = PygameKeyboardService()
-        physics_service = PygamePhysicsService()
-        screen_service = PygameScreenService(W_SIZE, "Asteroids")
-        audio_service = PygameAudioService()
-        mouse_service = PygameMouseService()
-    elif int(service_code) == 2:
-        keyboard_service = RaylibKeyboardService()
-        physics_service = RaylibPhysicsService()
-        screen_service = RaylibScreenService(W_SIZE, "Asteroids")
-        audio_service = RaylibAudioService()
-        mouse_service = RaylibMouseService()
+def main():
+    """
+        Create director, cast, script, then run the game loop
+    """
+    # Get all the services needed services 
+    services = get_services()
+
+    keyboard_service = services["keyboard"]
+    physics_service = services["physics"]
+    screen_service = services["screen"]
+    audio_service = services["audio"]
+    mouse_service = services["mouse"]
 
     # Create a director
     director = Director()

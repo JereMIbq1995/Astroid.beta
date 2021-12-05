@@ -13,4 +13,9 @@ class UpdateScreenAction(OutputAction):
         return super().set_priority(priority)
 
     def execute(self, actors, actions, clock, callback):
+        """
+            Simply calling update_screen on whatever screen service we're using
+            This action must execute AFTER everything is drawn on the canvas to make
+                sure that the drawing actually happens
+        """
         self._screen_service.update_screen()

@@ -3,6 +3,9 @@ from .constants.mouse import mouse_map
 
 class PygameMouseService:
     def __init__(self):
+        """
+            Everything that has to do with mouse events
+        """
         if not pygame.get_init():
             pygame.init()
 

@@ -1,4 +1,4 @@
-from genie.director2 import Director
+from genie.director import Director
 from genie.cast.cast import Cast
 from genie.script.script import Script
 from genie.services import *

@@ -3,23 +3,41 @@ from genie.cast.actor import Actor
 
 class PygamePhysicsService:
     def __init__(self):
+        """
+            Tools you can find here can help you:
+                - Check for collisions
+                - Check to see if 1 actor is on the left of, right of, above, or below another actor
+                - Move the actors
+                - Rotate the actors
+        """
         if not pygame.get_init():
             pygame.init()
 
     def _get_rectangle(self, actor: Actor):
+        """
+            Create a rectangle given an actor and its attributes
+            Users don't need to worry too much about this function
+        """
         return pygame.Rect(actor.get_top_left()[0], actor.get_top_left()[1], actor.get_width(), actor.get_height())
 
     def rotate_actors(self, actors : list):
+        """
+            Simply calling the rotate method of actors
+        """
         for actor in actors:
             actor.rotate()
 
     def move_actors(self, actors : list):
+        """
+            Simply tell all the actors to move with their current velocity
+        """
         for actor in actors:
             actor.move_with_vel()
 
     def check_collision(self, actor1 : Actor, actor2 : Actor):
         """
-            - create pygame.Shape
+            Check to see if actor1 collides with actor2
+            - create pygame.Shape rectangle
             - call colliderect
         """
         return self._get_rectangle(actor1) \
@@ -28,6 +46,11 @@ class PygamePhysicsService:
                 )
     
     def check_collision_point(self, actor: Actor, point : tuple):
+        """
+            Check to see if an actor collides with a given point
+                point: tuple
+                actor: Actor
+        """
         return self._get_rectangle(actor).collidepoint(point[0], point[1])
 
     def check_collision_list(self, target: Actor, actors: list):

@@ -3,8 +3,10 @@ from .constants.keys import keys_map
 
 class RaylibKeyboardService():
     def __init__(self):
-        # if not pygame.get_init():
-        #     pygame.init()
+        """
+            This class contains the tools you need to check for
+                keyboard events
+        """
         pass
 
     def is_quit(self):

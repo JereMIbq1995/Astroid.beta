@@ -3,25 +3,35 @@ from .constants.mouse import mouse_map
 
 class RaylibMouseService:
     def __init__(self):
-        # if not pygame.get_init():
-        #     pygame.init()
+        """
+            This class deals with all the mouse click/scroll events
+        """
         pass
     
     def is_button_down(self, button):
+        """
+            Check to see if a specific mouse button is being pressed down
+            button: an integer found in constants.mouse that represents
+                left, middle, right, or extra mouses.
+        """
         return is_mouse_button_down(mouse_map[button])
     
     def is_button_up(self, button):
+        """
+            Check to see if a specific mouse button is NOT being pressed down
+            button: an integer found in constants.mouse that represents
+                left, middle, right, or extra mouses.
+        """
         return is_mouse_button_up(mouse_map[button])
 
     def is_button_pressed(self, button):
         """
-            buttons: a tuple of mouse buttons that whoever calls this function
-                wants to check whether is pressed.
-                Each key is represented by an integer stored in genie.constants.mouse
+            Check to see if a specific mouse button is being pressed down ONCE
+            Once this is checked, the next frame will return false eventhough the
+                mouse button is still held down
             
-            Return Value:
-                The function will return a DICT that maps the key to either True or False,
-                    indicating whether the mouse button is pressed or not
+            button: an integer found in constants.mouse that represents
+                left, middle, right, or extra mouses.
         """
         return is_mouse_button_pressed(mouse_map[button])
         # mouse_buttons_state = pygame.mouse.get_pressed(num_buttons=5)
@@ -30,7 +40,10 @@ class RaylibMouseService:
 
     def is_button_released(self, button):
         """
-            Similar to is_button_pressed() but give the opposite result
+            Check to see if a specific mouse button is being pressed down ONCE
+            
+            button: an integer found in constants.mouse that represents
+                left, middle, right, or extra mouses.
         """
         return is_mouse_button_released(mouse_map[button])
         # mouse_buttons_state = pygame.mouse.get_pressed(num_buttons=5)
@@ -46,11 +59,19 @@ class RaylibMouseService:
         return mouse_delta.x > 0 or mouse_delta.y > 0
     
     def get_mouse_wheel_move(self):
+        """
+            This deals with scrolling
+
+            Return values:
+                - positive number if scrolled up
+                - 0 if not scrolling
+                - negative number if scrolled down
+        """
         return get_mouse_wheel_move()
 
     def get_current_coordinates(self):
         """
-            Simply ask pygame for the position of the mouse and return it
+            Simply ask raylib for the position of the mouse and return it
             as a tuple.
         """
         return (get_mouse_x(), get_mouse_y())

@@ -3,27 +3,48 @@ from genie.cast.actor import Actor
 
 class RaylibPhysicsService:
     def __init__(self):
+        """
+            Tools you can find here can help you:
+                - Check for collisions
+                - Check to see if 1 actor is on the left of, right of, above, or below another actor
+                - Move the actors
+                - Rotate the actors
+        """
         pass
 
     def _get_rectangle(self, actor: Actor):
+        """
+            Create a rectangle given an actor and its attribute.
+            (don't worry about this)
+        """
         return Rectangle(actor.get_top_left()[0], actor.get_top_left()[1], actor.get_width(), actor.get_height())
 
     def rotate_actors(self, actors : list):
+        """
+            Simply tell all the actors to rotate using their own rotation velocity
+        """
         for actor in actors:
             actor.rotate()
 
     def move_actors(self, actors : list):
+        """
+            Tell all the actors to move using their velocity
+        """
         for actor in actors:
             actor.move_with_vel()
 
     def check_collision(self, actor1 : Actor, actor2 : Actor):
         """
+            Check to see if actor1 is collided with actor2
             - create Rectangle shapes for both actors
             - call check_collision_recs (for rectangles)
         """
         return check_collision_recs( self._get_rectangle(actor1), self._get_rectangle(actor2) )
     
     def check_collision_point(self, actor: Actor, point : tuple):
+        """
+            Check to see if an actor is collided with a point
+        """
         return check_collision_point_rec( Vector2(point[0], point[1]), self._get_rectangle(actor) )
     
     def check_collision_list(self, target: Actor, actors: list):

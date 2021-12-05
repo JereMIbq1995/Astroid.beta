@@ -11,7 +11,7 @@ class HandleShipMovementAction(InputAction):
 
     def execute(self, actors, actions, clock, callback):
         """
-            This action handles the movement of the ship
+            This action handles the input of the player to make the ship move
         """
         # Look for the ship among the actors if we haven't already known it
         self._ship = actors.get_first_actor("ship")

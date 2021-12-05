@@ -2,6 +2,9 @@ from pyray import *
 
 class RaylibAudioService:
     def __init__(self):
+        """
+            Everything that has to do with sound...
+        """
         init_audio_device()
         self._sound_cache = {}
 
@@ -18,8 +21,8 @@ class RaylibAudioService:
     def play_sound(self, path, volume : float = 1):
         """
             Play a sound given:
-                - the path to the sound file 
-                - the volume
+                - the path to the sound file (a string)
+                - the volume: goes from 0 to 1
         """
         try:
             # Load the sound if it's not in cache, otherwise pull from cache

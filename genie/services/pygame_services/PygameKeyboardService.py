@@ -3,6 +3,9 @@ from .constants.keys import keys_map
 
 class PygameKeyboardService():
     def __init__(self):
+        """
+            Everything that has to do with keyboard events
+        """
         if not pygame.get_init():
             pygame.init()
 

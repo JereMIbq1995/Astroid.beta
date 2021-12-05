@@ -3,6 +3,13 @@ from genie.services import mouse
 
 class HandleStartGameAction(InputAction):
     def __init__(self, priority, mouse_service, physics_service, actions):
+        """
+            This action adds a bunch of other actions onto the script when
+                the Start Game button is clicked
+
+            actions: a dictionary of the form {"input": [action1, action2,...], "update": [], "output": []}
+                    This is a bunch of actions the must be added to the script once the game starts
+        """
         super().__init__(priority)
         self._mouse_service = mouse_service
         self._physics_service = physics_service
@@ -14,8 +21,7 @@ class HandleStartGameAction(InputAction):
                 - check to see if the mouse coordinate collides with the start game button
                 - if the mouse collides with the button:
                     + remove the button (or switch it to the "clicked" state)
-                    + add handleShipMovementAction to the script
-                    + add spawnAstroidAction to the script
+                    + add all actions in self._actions to the script
         """
         start_button = actors.get_first_actor("start_button")
         mouse_pos = self._mouse_service.get_current_coordinates()

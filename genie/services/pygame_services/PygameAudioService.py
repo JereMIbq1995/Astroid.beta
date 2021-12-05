@@ -2,6 +2,9 @@ import pygame
 
 class PygameAudioService:
     def __init__(self):
+        """
+            Everything that has to do with sound...
+        """
         if not pygame.get_init():
             pygame.init()
         pygame.mixer.init()

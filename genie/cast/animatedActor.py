@@ -6,7 +6,8 @@ class AnimatedActor(Actor):
                     event_triggered : bool = True,
                     x: float = 0, y: float = 0, 
                     vx: float = 0, vy: float = 0, 
-                    rotation: float = 0, rotation_vel: float = 0):
+                    rotation: float = 0, rotation_vel: float = 0,
+                    flipped : bool = False):
 
         self._paths = paths
         self._animation_speed = float(animation_fps) / float(game_fps)
@@ -15,7 +16,7 @@ class AnimatedActor(Actor):
         self._current_frame = 0
         super().__init__(paths[0], width, height, x=x, y=y, 
                             vx=vx, vy=vy, rotation=rotation, 
-                            rotation_vel=rotation_vel)
+                            rotation_vel=rotation_vel, flipped = flipped)
     
     def get_paths(self):
         return self._paths

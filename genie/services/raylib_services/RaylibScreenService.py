@@ -51,13 +51,20 @@ class RaylibScreenService:
         """
         image_path = actor.get_path()
         # print("2")
+                
+        image_f = load_image(image_path)
+        image_flip_horizontal(image_f)
+
         texture = load_texture(image_path)
-        
+        texture_f = load_texture_from_image(image_f)
+        if texture_f == None:
+            print("texture_f is none for some reason")
         # put image in cache so we don't have to load again
         if (image_path not in self._textures_cache.keys()):
             self._textures_cache[image_path] = texture
+            self._textures_cache[image_path + "_f"] = texture_f
 
-        return texture
+        return texture_f if actor.flipped() else texture
 
     def load_textures(self, actors : list):
         """
@@ -210,7 +217,11 @@ class RaylibScreenService:
         path = actor.get_path()
         try:
             # Load image from cache or from file
-            texture = self._textures_cache[path] if path in self._textures_cache.keys() else self._load_texture(actor)
+            if path in self._textures_cache.keys():
+                texture = self._textures_cache[path + "_f"] if actor.flipped() else self._textures_cache[path]
+            else:
+                texture = self._load_texture(actor)
+
             # width and height of the image
             frame_width = actor.get_width()
             frame_height = actor.get_height()

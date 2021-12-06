@@ -1,16 +1,4 @@
 class Actor:
-    """
-        A thing that participates in an animation. Anything that either MOVES, can be DRAWN
-        on the screen, or BOTH is an actor.
-        For the purpose of collision checking, all actors are represented with the shape of a RECTANGLE.
-        
-        Attributes:
-            _x : the x coordinate of the center of the rectangle
-            _y : the y coordinate of the position
-            _vx : the horizontal velocity
-            _vy : the vertical velocity
-            _height : 
-    """
     def __init__(self, path : str,
                     width : int,
                     height : int,
@@ -22,10 +10,34 @@ class Actor:
                     vy : float = 0,
 
                     rotation : float = 0,
-                    rotation_vel : float = 0):
+                    rotation_vel : float = 0,
+
+                    flipped: bool = False):
         """
-            Initialize the actor using the image and
-            a scaling factor, or width and height
+            A thing that participates in an animation. Anything that either MOVES, can be DRAWN
+            on the screen, or BOTH is an actor.
+            For the purpose of collision checking, all actors are represented with the shape of a RECTANGLE.
+            
+            Attributes:
+                _path : The file path of the image of the actor. Should be a path to a .png file
+                _width : Width of the actor. Used to scale the image AND to determine the hit box
+                _height : Height of the actor. Used to scale the image AND to determine the hit box
+                
+                _x : the x coordinate of the center of the rectangle
+                _y : the y coordinate of the position
+                
+                _vx : the horizontal velocity
+                _vy : the vertical velocity
+                
+                _rotation : How many degrees you want to rotate the image, with 0 being the original position.
+                _rotational_vel : Rotational velocity. How many degrees you want the actor to rotate each frame.
+                                    When this value is set, the actor will be constantly rotating.
+                
+                _mirrored : Do you want the image of the actor to be mirrored?
+
+            Note: A lot of the animations, scaling, image transformations,... will be handled for you
+                    when an actor is passed to draw_actors() in the screen service. All you need
+                    to do is setting these values correctly here.
         """
 
         self._path = path
@@ -41,6 +53,8 @@ class Actor:
 
         self._rotation = rotation
         self._rotation_vel = rotation_vel
+
+        self._flipped = flipped
         
     # Path
     def get_path(self):
@@ -125,6 +139,19 @@ class Actor:
     
     def set_rotation_vel(self, rotation_vel):
         self._rotation_vel = rotation_vel
+    
+    # Handle flipping image horizontally
+    def flipped(self):
+        """
+            Tells you whether the image is flipped compared to the ORIGINAL image
+        """
+        return self._flipped
+
+    def flip_image(self):
+        """
+            flip the image horizontally from the current orientation
+        """
+        self._flipped = not self._flipped
 
     # Move functions
     def move_with_vel(self):

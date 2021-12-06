@@ -42,6 +42,7 @@ class PygameScreenService:
         # put image in cache so we don't have to load again
         if (image_path not in self._images_cache.keys()):
             self._images_cache[image_path] = image
+            self._images_cache[image_path + "_f"] = pygame.transform.flip(image, True, False)
 
         return image
 
@@ -178,7 +179,10 @@ class PygameScreenService:
         
         try:
             # Load image from cache or from file
-            image = self._images_cache[path] if path in self._images_cache.keys() else self._load_image(actor)
+            if path in self._images_cache.keys():
+                image = self._images_cache[path + "_f"] if actor.flipped() else self._images_cache[path]
+            else:
+                image = self._load_image(actor)
 
             # Ensure that the image rotates when actor._rotation changes or when width and height change
             transformed_image = pygame.transform.rotate(
